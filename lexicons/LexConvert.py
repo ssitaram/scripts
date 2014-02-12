@@ -20,6 +20,13 @@ PRON_FIELD = 3
 OUTF = open("festival_lex", "w")
 OUTF.close()
 
+
+#initial lexicon, does not have info about repetitions
+OUTI = open("initial_lex", "w")
+OUTI.close()
+
+
+
 PHONE_MAP = open("phone_table", "r")
 ph_map_file = PHONE_MAP.read()
 PHONE_MAP.close()
@@ -57,9 +64,28 @@ for line in lex.split("\n")[:-1]:
 						mapped_letter = "B"
 						phoneme_string += " "+mapped_letter
 		#print(phoneme_string)
-		OUTF = open("festival_lex", "a")
-		OUTF.write(native_word+" "+phoneme_string[1:]+"\n")
-		OUTF.close()
+		OUTI = open("initial_lex", "a")
+		OUTI.write(native_word+" "+phoneme_string[1:]+"\n")
+		OUTI.close()
+
+INPI = open("initial_lex", "r")
+init_lex = INPI.read()
+INPI.close()
+
+
+#dict storing all words in their lex with their counts so far
+wordcounts = {}
+
+for line in init_lex.split("\n"):
+	word = line.split()[0]
+	phonestring = line.split()[1:]
+	if word not in wordcounts.keys():
+		wordcounts[word] = 1
+	else:
+		wordcounts[word] = wordcounts[word]+1
+		print("word repeated, count is "+str(wordcounts[word]))
+
+	
 OUTS = open("sphinx_dic", "w")		
 OUTS.close()
 
